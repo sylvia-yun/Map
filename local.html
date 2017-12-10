@@ -1,0 +1,98 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>Code by MingZe - 获取地理位置信息工具</title>
+    <link href="templates/css/global.css" type="text/css" rel="stylesheet">
+    <script src="config/dataInit.js"></script>
+    <script src="library/Utility.js"></script>
+    <script src="library/MapManager.js"></script>
+    <script src="templates/js/init.js"></script>
+    <script src="https://webapi.amap.com/maps?v=1.3&key=d387a4cdcbb9ad077cea311cbe17edcb&plugin=AMap.Geolocation"></script>
+</head>
+<body>
+<div id="wrap">
+    <div id="mask">
+        <div id="mask_txt">Loading……</div>
+    </div>
+    <div id='tip'>
+        定位中,请稍候...
+    </div>
+    <button class="fun myPosition" id="btnMyPos" style="width:120px;">获取当前位置</button>
+    <div id="container" tabindex="0"></div>
+</div>
+<!-- UI组件库 1.0 -->
+<script>
+    var btnMyPosObj = document.getElementById('btnMyPos');
+    var tipObj = document.getElementById('tip');
+    var maskObj = document.getElementById('mask');
+    maskObj.style.display='block';
+    tipObj.style.display = 'block';
+    var jdzcip = {
+        lng: 117.189000,
+        lat: 29.356377,
+        zoom: 15
+    };
+    var config = {
+        map: {
+            resizeEnable: true,
+            scrollWheel: true,
+            zoom: jdzcip.zoom,
+            center: [jdzcip.lng, jdzcip.lat]
+        },
+        toolBar: "",
+        scale: "",
+        geolocation: "{showButton: false,showCircle: true,showMarker: true,timeout: 5200,enableHighAccuracy: true,zoomToAccuracy: true}"
+    }
+
+    var mapInitPara = {
+        container: "container",
+        mapCfg: config.map,
+        plugin: ["AMap.ToolBar", "AMap.Scale", "AMap.Geolocation"],
+        pluginCfg: [config.toolBar, config.scale, config.geolocation]
+    };
+
+    var mapManager = new MapManager();
+    mapManager.mapInit(mapInitPara);
+    mapManager.setGelocationCompleteHandler(gelocationComplete);
+    mapManager.setGelocationErrorHandler(gelocationError);
+    mapManager.getMyPosition();
+
+    var map;
+    map=mapManager.getMapObj();
+
+    map.on('click', function(e) {
+        tipObj.innerHTML = '当前点击位置经纬度：【'+e.lnglat.getLng()+","+e.lnglat.getLat()+"】";
+        var tmpPosition = new AMap.LngLat(e.lnglat.getLng(), e.lnglat.getLat());
+        showMyPositionMarker(tmpPosition);
+    });
+
+    btnMyPosObj.addEventListener('click', function () {
+        mapManager.getMyPosition();
+    });
+
+    function gelocationComplete(status) {
+        tipObj.innerHTML = '当前定位经纬度：【'+status.position.lng+","+status.position.lat+"】";
+        showMyPositionMarker(status.position);
+        maskObj.style.display='none';
+        btnMyPosObj.style.display='block';
+    }
+
+    function showMyPositionMarker(position){
+        var myPositionMarker= mapManager.getMyPositionMarker();
+        mapManager.clearMap();
+        myPositionMarker.setPosition(position);
+        mapManager.addMarkerToMap(myPositionMarker);
+        var zoom=mapManager.getMapZoom();
+        mapManager.setCenter(position.lng, position.lat,zoom);
+    }
+
+    function gelocationError(status) {
+        maskObj.style.display='none';
+        btnGetPosObj.style.display='block';
+        tipObj.innerHTML = '定位失败，可能您当前环境没有开启定位授权';
+    }
+</script>
+</body>
+</html>

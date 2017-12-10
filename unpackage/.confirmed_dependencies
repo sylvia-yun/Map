@@ -1,0 +1,38 @@
+{
+  "index.html": {
+    "href": "index.html",
+    "resources": [
+      "templates/css/global.css",
+      "config/dataInit.js",
+      "library/Utility.js",
+      "library/MapManager.js",
+      "templates/images/mark_my_redflag.png",
+      "templates/images/ends.png",
+      "templates/images/starts.png",
+      "templates/images/loading.gif",
+      "showlist.html"
+    ],
+    "refer": [
+      "showlist.html"
+    ],
+    "priority": 0
+  },
+  "showlist.html": {
+    "resources": [
+      "templates/css/showlist.css",
+      "templates/images/top.jpg",
+      "demo1.html"
+    ],
+    "refer": [
+      "demo1.html"
+    ]
+  },
+  "demo1.html": {
+    "resources": [
+      "templates/css/demo.css",
+      "templates/js/jquery-3.1.1.min.js",
+      "templates/media/song.mp3",
+      "templates/images/musicbegin.png"
+    ]
+  }
+}

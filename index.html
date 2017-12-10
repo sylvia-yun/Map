@@ -1,0 +1,192 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <title>景德镇双语app</title>
+    <link href="templates/css/global.css" type="text/css" rel="stylesheet">
+    <script src="config/dataInit.js"></script>
+    <script src="library/Utility.js"></script>
+    <script src="library/MapManager.js"></script>
+    <script src="https://webapi.amap.com/maps?v=1.3&key=d387a4cdcbb9ad077cea311cbe17edcb&plugin=AMap.Geolocation"></script>
+    <script src="http://webapi.amap.com/ui/1.0/main.js"></script>
+    <script src="templates/js/init.js"></script>
+</head>
+<body>
+<div id="wrap">
+    <div id="mask">
+        <div id="mask_txt">Loading……</div>
+    </div>
+    <div id='tip'>
+        定位中,请稍候...
+    </div>
+    <div id="searchWrap">
+        <div id="searchBar">
+            <input id="iptSearch" type="text" class="search" placeholder="请输入要检索的关键字">
+        </div>
+        <div id="searchList"></div>
+        <div id="searchClose"></div>
+    </div>
+    <button class="fun park" id="btnPark" onclick="window.location.href='templates/html/showlist.html'">景区展示</button>
+    <button class="fun myPosition" id="btnMyPos">我的位置</button>
+    <button class="fun search" id="btnSearch">搜索</button>
+    <button class="fun myPosition" id="btnGetPos">开始定位</button>
+    <div id="container" tabindex="0"></div>
+</div>
+
+<!-- UI组件库 1.0 -->
+<script>
+    var btnParkObj = document.getElementById('btnPark');
+    var btnMyPosObj = document.getElementById('btnMyPos');
+    var btnGetPosObj = document.getElementById('btnGetPos');
+    var btnSearchObj = document.getElementById('btnSearch');
+    var iptSearchObj = document.getElementById('iptSearch');
+    var searchWrapObj = document.getElementById('searchWrap');
+    var searchListObj = document.getElementById('searchList');
+    var searchCloseObj = document.getElementById('searchClose');
+    var maskObj = document.getElementById('mask');
+    var tipObj = document.getElementById('tip');
+    var searchBarObj = document.getElementById('searchBar');
+    maskObj.style.display = 'block';
+    tipObj.style.display = 'block';
+    var local = {
+        lng: 117.211418,
+        lat: 29.282205,
+        zoom: 12
+    };
+    var config = {
+        map: {
+            resizeEnable: true,
+            scrollWheel: true,
+            zoom: local.zoom,
+            center: [local.lng, local.lat]
+        },
+        toolBar: "",
+        scale: "",
+        geolocation: "{showButton: false,showCircle: true,showMarker: true,timeout: 5200,enableHighAccuracy: true,zoomToAccuracy: true}"
+    }
+
+    var mapInitPara = {
+        container: "container",
+        mapCfg: config.map,
+        plugin: ["AMap.ToolBar", "AMap.Scale", "AMap.Geolocation"],
+        pluginCfg: [config.toolBar, config.scale, config.geolocation]
+    };
+
+    var infoTitle = '<p class="simpleInfoWindow-title">%TITLE%</p>';
+    var infoBody = '<p class="simpleInfoWindow-body">';
+    infoBody += '<span style="display:%VRDISPLAY%"><a href="%URL%" target="_blank">—→关于%CNAME%←—</a></span>';
+    infoBody += '<span style="display:%NAVDISPLAY%" class="pointer" onclick="navToHandler(%LNG%,%LAT%,\'%ENDNAME%\')">→导航去这里←</span></p>';
+    var simpleInfoWindowTpl = {
+        title: infoTitle,
+        body: infoBody
+    };
+
+    var mapManager = new MapManager();
+    mapManager.mapInit(mapInitPara);
+    mapManager.setMarkerData(markerData);
+    mapManager.setSimpleInfoWindowTpl(simpleInfoWindowTpl);
+    mapManager.setGelocationCompleteHandler(gelocationComplete);
+    mapManager.setGelocationErrorHandler(gelocationError);
+    mapManager.setShowMarkerComplete(showMarkerCompleteHandler);
+    mapManager.showMarker();
+    mapManager.getMyPosition();
+
+    var myPositionMarker;
+    myPositionMarker = mapManager.getMyPositionMarker();
+
+    function navToHandler(_lng, _lat, _endName) {
+        //startPosition=new AMap.LngLat(117.316061,29.329521);
+        if (typeof (startPosition) == "undefined") {
+            alert("定位失败\n可能您没有开启定位授权");
+        }
+        else {
+            var e = _lng + ',' + _lat;
+            var s = startPosition.lng + ',' + startPosition.lat;
+//            var url='driving.html?s='+s+'&e='+e;
+            var url = mapManager.getNavUrl(s, e, _endName);
+            window.location.href = url;
+        }
+    }
+
+    btnParkObj.addEventListener('click', function () {
+        mapManager.setCenter(jdzcip.lng, jdzcip.lat);
+    });
+
+    btnMyPosObj.addEventListener('click', function () {
+        mapManager.setCenter(startPosition.lng, startPosition.lat);
+        myPositionMarker.setPosition(startPosition);
+        mapManager.addMarkerToMap(myPositionMarker);
+    });
+
+    btnGetPosObj.addEventListener('click', function () {
+        window.location.reload();
+    });
+
+    btnSearchObj.addEventListener('click', function () {
+        tipObj.style.display = 'none';
+        searchBarObj.style.display = 'block';
+        searchWrapObj.style.display = 'block';
+        searchListObj.style.display = 'block';
+    });
+
+    iptSearchObj.addEventListener('input', function () {
+        var val = this.value;
+        var regChs = new RegExp("[\\u4E00-\\u9FFF]+", "g");
+        if (val.length != 0 || regChs.test(val)) {
+            maskObj.style.display = 'block';
+            var reg = new RegExp(val, "g");
+            var tmpCode = '<li class="searchLi" data-index="%INDEX%" onclick="seachItemOnClickHandler(this)"><span>%TITLE%</span></li>';
+            var outCode = '';
+            for (var x in markerData) {
+                var tit = markerData[x].title;
+                if (reg.test(tit)) {
+                    outCode += tmpCode.replace("%INDEX%", x);
+                    outCode = outCode.replace("%TITLE%", tit);
+                }
+            }
+            if (outCode.length == 0) {
+                outCode = '<li class="searchLi" ><span>暂无数据</span></li>';
+            }
+            searchListObj.innerHTML = '<ul class="searchUl">' + outCode + '</ul>';
+            maskObj.style.display = 'none';
+        }
+    });
+
+    searchCloseObj.addEventListener('click', function () {
+        searchWrapObj.style.display = 'none';
+    })
+
+    function gelocationComplete(status) {
+        tipObj.innerHTML = '定位成功！';
+        setTimeout(function () {
+            tipObj.style.display = 'none';
+        }, 1500);
+        maskObj.style.display = 'none';
+        btnMyPosObj.style.display = 'block';
+        startPosition = status.position;
+    }
+
+    function gelocationError(status) {
+        maskObj.style.display = 'none';
+        btnGetPosObj.style.display = 'block';
+        tipObj.innerHTML = '定位失败，可能您当前环境没有开启定位授权';
+    }
+
+    var marksObj;
+    function showMarkerCompleteHandler(_marksObj) {
+        marksObj = _marksObj;
+    }
+
+    function seachItemOnClickHandler(obj) {
+        var tmpMarkerObj = marksObj[obj.getAttribute("data-index")];
+        var tmpMarkerInfo = markerData[obj.getAttribute("data-index")];
+        AMap.event.trigger(tmpMarkerObj, 'click');
+        tmpMarkerObj.emit('click');
+        mapManager.setCenter(tmpMarkerInfo.lng, tmpMarkerInfo.lat, 16);
+        searchWrapObj.style.display = "none";
+    }
+
+</script>
+</body>
+</html>

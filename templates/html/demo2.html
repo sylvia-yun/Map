@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+		<title></title>
+		<link rel="stylesheet" href="templates/css/demo.css"/>
+		<script type="text/javascript" src="templates/js/jquery-3.1.1.min.js"></script>
+	</head>
+	<body>
+		<script>
+//			window.onload=function(){
+//				
+//				var open = document.getElementsByClassName("open")[0];
+//				document.getElementById("info").style.display="none";
+//				open.onclick = function(){
+//					open.nextSibling.style.display="block";
+//					//document.getElementById("info").style.display="block";
+//				}
+//				
+//				var close = document.getElementsByClassName("close")[0];
+//				close.onclick = function(){
+//					close.nextSibling.style.display="none";
+//					//document.getElementById("info").style.display="none";
+//				}
+//			}
+            
+			$(function(){
+				document.getElementById("info").style.display="none";
+				$(".open").click(function(){
+					//得到下一个兄弟节点
+					//$("#info").html("fuhajshf");
+					$(this).next().css("display","block");
+					
+				});
+				$(".close").click(function(){
+					//得到上一个兄弟节点
+					$(this).prev().css("display","none");
+               });
+            });
+            
+$(function() {
+	var music = document.getElementById("music");
+	$("#begin").css("display","block");
+	 $("#stop").css("display","none");
+	$("#begin").click(function() {
+		if(music.paused) {
+			music.play();
+//			$("#begin").css("src","url(templates/images/musicpause.png)");
+			$("#begin").css("display","none");
+			$("#stop").css("display","block");
+		}
+	});
+	$("#stop").click(function(){
+		if(music.played){
+			music.pause();
+			$("#stop").css("display","none");
+			$("#begin").css("display","block");
+		}
+	});
+});
+		</script>
+<div id="wrap">
+	<div class="chinese">
+		<p>中文介绍</p>
+		<button class="open">阅读全文</button>
+		<span id="info">
+			<strong>历史发展：</strong><br />
+        “御窑厂”的历史自元延伸至清朝。作为专造宫廷用瓷的皇家窑厂， 在元、明、清三个历史朝代中起身，发展，延续。蒙古族“国俗尚白，以白为吉”， 于是，白色的瓷器便成为元代帝国的珍爱之品。元代世祖忽必烈在景德镇设立第一所官窑——“浮梁瓷局”， 便是景德镇御窑厂的萌芽。元代景德镇成功地造出枢府瓷、青花和釉里红瓷， 其成就为后来明清两代御窑厂制瓷工艺的高度发展奠定了基础。之后，朱元璋推翻蒙元帝国，建立大明王朝。 明初，在原浮梁瓷局的基础上建立了御窑厂，宫廷瓷器开始注明皇帝的年款。 洪武窑瓷器，土质细腻，胎体很薄，釉分青、白二色，以纯素者为佳。 据记载，洪武窑有大龙缸窑、青窑、色窑、风火窑、匣窑等二十座。 御窑厂烧出器型硕大的青花釉里红大盘、大碗、大罐，素朴雄浑粗豪而不失民族文化风韵，形成了洪武官窑的独特风格。<br />
+        “宣德”为明宣宗朱瞻基年号。宣德时，景德镇将洪武的龙缸窑的一半改为青窑。窑位增至五十八座，御器的烧造量一时猛增。宣窑制品是明代最为精致的瓷器，尤其是青花瓷，已达到了很高水平。史载：“宣窑器，无物不佳，小巧尤妙，此明窑极盛时也。”<br />
+		宣德官窑有极为严格的管理制度。朝廷派官员督陶，负责宫廷用瓷的生产。特别是对贡余品、次品管理近乎苛刻，督陶官张善“贪酷虐下人不堪所造御用瓷，多以分馈其同列”。宣德二年（1427年），为了整肃纪纲，怒斩督陶官，官窑贡余品、次品一律集中打碎，就地掩埋，既维护了皇权的威严，也打出了官窑瓷器的至精至美。<br />
+		唐英是雍正、乾隆两朝的督陶官，是我国古代杰出的陶瓷艺术家。唐英隶属汉军正白旗。1728年，他奉命兼任景德镇督陶官。唐英不仅仅是一个管理者，更是一个陶瓷制作工艺的实践者，他献身瓷艺，以此为乐，锲而不舍。为潜心研究瓷器制作工艺，他“杜门谢交游”，聚精会神，苦心竭力与工匠“同其息食者三年”，成为陶瓷艺术大师。唐英因为兼职太多分散精力，于是先后两次向乾隆皇帝提出辞呈，要辞去关税官吏这一让人欣羡的官职，而专司窑务。雍正、乾隆两朝御窑取得的辉煌成就，与唐英的个人奉献是分不开的。乾隆时期的御窑又称为“唐窑”，这就是对唐英的最大肯定。<br />
+		宣德皇帝朱瞻基喜好玩蟋蟀。古典文学名著《聊斋志异》的《促织》篇中对此就有所描写。御器厂为朝廷烧造了数十种纹饰精美的蟋蟀罐。其中青花双向五爪龙纹蟋蟀罐就是宣德皇帝观看斗蟋蟀的斗盆。这位太平天子，不仅有玩蟋蟀之好，而且酷爱养鸟赏花。宣德御窑厂为朝廷烧造的花鸟虫鱼器皿，就达几十种之多。<br />
+		成化年间，“成化皇帝”这位具有深厚艺术修养，又善于绘画的帝王，对小巧精致的工艺品情有独钟。成化皇帝的审美情趣和个人喜好，直接影响到御窑的生产。在他的倡导下，成化官窑烧造出瓷质精美，彩饰优雅小巧别致的斗彩瓷器，成为明代官窑之冠，“成化斗彩”一直被人视为珍品。古时就有“神宗（万历帝）御前尚食有成杯一双，价值十万”的记载。<br />
+		康熙时期，御窑烧制了大量笔筒、水洗、臂搁、瓷砚等文房用瓷，这与康熙皇帝实行尊孔崇儒的文化政策是分不开的。作为一位具有雄才大略的皇帝，康熙清楚地认识到，满族的武力不足以统治中国。唯有遵孔崇儒，学习汉民族文化，才能巩固满清帝国统治。因此，即位伊始，康熙即把程朱理学确定为官方哲学，采取怀柔汉族知识分子政策。对文化的推崇自然促进了文房用瓷的烧制，康熙刻意求精地让御窑厂的窑工们烧制各类文房用具，这其中以笔筒烧制地最为出色，在清代陶瓷史上占有重要地位。<br />
+		咸丰三年（1853年），太平军攻打景德镇。大军入城后，见御窑厂专造皇帝用瓷，耗费资金不算，还经常鞭打欺压瓷工，为替百姓解恨，便放火把御窑厂烧了。御窑厂一停就是好几年。直至同治五年（1866年）间，清政府军机大臣李鸿章筹银十三万两，命九江关督蔡锦清在御窑厂旧址，重建堂舍七十二间，复兴御窑厂，所有督陶事务也由九江关监督管理。同治七年（1868年），御窑厂为同治皇帝大婚烧造喜宴用瓷，一时闹得沸沸扬扬。直至1911年，辛亥革命成功彻底推翻帝制，御窑厂才寿终正寝。<br />
+		<strong>现状：</strong><br />
+		景德镇珠山御窑厂遗址是元、明、清三代专造宫廷用瓷的皇家窑厂，一九八三年被公布为景德镇市文物保护单位，该遗址保护范围为：东至中华路，西至东司岭，北至彭家弄，南至珠山路。其保护范围为5.43万平方米。景德镇御窑厂是我国烧造时间最长，规模最大，工艺最为精湛的管办瓷厂。这里集中了最优秀的人才，最精湛的技艺，最精细的原料，最充足资金，造出了许多精美绝伦的瓷器，成为真正的无价之宝。御窑厂在陶瓷发展史上占有特殊重要的地位。该遗址地下遗存极为丰富，已出土元代官窑瓷器和大量明代洪武、永乐、宣德、正统、成化、弘治、正德年间的各类器皿，对研究我国陶瓷发展史有着极为重要的意义。<br />
+		为皇家烧造御窑瓷约700余年，流传下来珍遗官窑瓷器现大多数收藏在北京、台北故宫博物院和世界各大博物馆。除此之外，还包括明清时期御窑厂窑业遗迹、窑炉遗迹、墙体、道路遗迹、古井、古树、窑业堆积遗迹、衙署建筑及其它附属建筑遗迹；另外还包括与明清御窑紧密相关的元代官窑遗迹，以及出土的明清御窑瓷器碎片及窑业工具等可移动文物；同时御窑厂遗址区周边传统街巷、民居、商铺、民窑作坊、历史文脉以及昌江等，也遗存构成的重要组成部分。<br />
+		
+		</span>
+		<button class="close">收起全文</button>
+	</div>
+	<div class="English">
+		<p>英文介绍</p>
+		<button class="open">阅读全文</button>
+		<span class="info">Tang Ying, the governor in the years of Yongzheng and Qianlong, was an outstanding ancient Chinese ceramic artist. Tang Ying was a member of The White Flag. In 1728, he was ordered to be the governor of Jingdezhen. Tang Ying was not just a manager, but also a ceramic production process practitioner. He dedicated porcelain art as a pleasure and perseverance. For the painstaking process, he "Du door tour", concentrated on efforts and cr</span>
+		<button class="close">收起全文</button>
+	</div>
+	<img src="templates/images/musicbegin.png" id="begin" />
+	<img src="templates/images/musicpause.png" id="stop" />
+	<audio src="templates/media/song.mp3" controls="controls" preload id="music" hidden="hidden">
+	</audio>
+</div>
+	</body>
+</html>
